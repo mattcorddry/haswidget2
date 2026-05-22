@@ -84,7 +84,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         password=entry.get('password', '')
         polling=entry.get('polling', False) 
         device: SwidgetDevice = await discover_single(entry.data['host'],
-                                                      password
+                                                      password,
                                                       ssl=False,
                                                       polling=polling)
     except SwidgetException as ex:
