@@ -15,10 +15,14 @@
             },
             "discovery_confirm": {
                 "data": {
-                    "password": "Password / API Key",
+                    "password": "Password",
                     "polling": "Enable device polling"
                 },
-                "description": "Do you want to setup {name} ({host})?"
+                "description": "Do you want to setup {name} ({host})?",
+                "data_description": {
+                    "password": "Password or device API key",
+                    "polling": "Some devices have an incomplete websockets implementation and require polling to obtain accurate state"
+                }
             },
             "pick_device": {
                 "data": {
@@ -28,10 +32,15 @@
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Password / API Key",
+                    "password": "Password",
                     "polling": "Enable device polling"
                 },
-                "description": "If you leave the host empty, discovery will be used to find devices."
+                "description": "If you leave the host empty, discovery will be used to find devices.",
+                "data_description": {
+                    "host": "Hostname or IP address of the Swidget on your network",
+                    "password": "Password or device API key",
+                    "polling": "Some devices have an incomplete websockets implementation and require polling to obtain accurate state"
+                }
             }
         }
     }
