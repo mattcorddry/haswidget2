@@ -28,6 +28,33 @@ class SwidgetTimerSwitch(SwidgetSwitch):
             except (KeyError, AttributeError):
                 # If we can't check timer, trust the toggle state
                 return True
+
+        elif toggle_state == "off":
+            # if the toggle.state is off, the fan can still be on from the timer
+            try:
+                timer_info = self.assemblies['host'].components["0"].functions.get('timer', {})
+                if isinstance(timer_info, dict):
+                    # new firmware returns timer.buttonLevel and timer.buttonTimer entities
+                    # TODO: handle new timer.autoTimer and timer.autoLevel entities
+                    button_timer = timer_info.get("buttonTimer", None)
+                    button_level = timer_info.get("buttonLevel", None)
+                    if button_level is not None:
+                        # If the button level is 255 we are in "stay on" mode
+                        if button_level == 255:
+                            return True
+                        # If the button level is 1..3 we are in "timer" mode
+                        # so we should look at button_timer value as the remaining time
+                        elif button_level > 0:
+                            if button_timer is not None and button_timer > 0:
+                                return True
+                            else:
+                                return False
+                        else:
+                            return False
+            except (KeyError, AttributeError):
+                # If we can't check timer, trust the toggle state
+                return False
+
         
         return False
 
