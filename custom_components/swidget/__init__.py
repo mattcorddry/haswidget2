@@ -81,8 +81,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Swidget from a config entry."""
     try:
         _LOGGER.info(f"Setup Data: {entry.data}")
-        password=entry.get('password', '')
-        polling=entry.get('polling', False) 
+        password=entry.data.get('password', '')
+        polling=entry.data.get('polling', False) 
         device: SwidgetDevice = await discover_single(entry.data['host'],
                                                       password,
                                                       ssl=False,
