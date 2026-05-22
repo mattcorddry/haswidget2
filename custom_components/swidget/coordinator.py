@@ -26,7 +26,7 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> None:
         """Initialize DataUpdateCoordinator to gather data for specific device"""
         self.device = device
-        update_interval = timedelta(seconds=0.5)
+        update_interval = timedelta(seconds=10)
         super().__init__(
             hass,
             _LOGGER,
@@ -46,6 +46,16 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
         # when we do not need it.
         await self.async_request_refresh()
 
-    async def _async_update_data(self) -> None:
-        """Fetch all device and sensor data from api."""
-        return
+    async def _async_update_data(self) -> SwidgetDevice:
+        """Fetch all device and sensor data from api over local HTTP."""
+        try:
+            # Explicitly force the underlying swidget library object
+            # to make a REST call to retrieve the physical state of the hardware.
+            await self.device.update()
+
+            # Return the updated device object so it caches inside self.coordinator.data
+            return self.device
+
+        except Exception as err:
+            # Gracefully catches network drops/timeouts and flags entities as unavailable
+            raise UpdateFailed(f"Error communicating with Swidget device over HTTP: {err}")
