@@ -57,7 +57,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     """
     # Return info that you want to store in the config entry.
     try:
-        d = SwidgetDevice(data['host'], data['password'], False)
+        d = SwidgetDevice(data['host'], data['password'], False, data['polling'])
         await d.update()
         return {"title": f"{d.friendly_name}"}
     except:
@@ -138,7 +138,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self.context["title_placeholders"] = placeholders
         return self.async_show_form(
             step_id="discovery_confirm",
-            data_schema=vol.Schema({vol.Optional("password"): str}),
+            data_schema=vol.Schema({vol.Optional("password"): str, vol.Optional("polling"): bool}),
             description_placeholders=placeholders
         )
 
@@ -204,7 +204,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="pick_device",
             data_schema=vol.Schema({vol.Required(CONF_DEVICE): vol.In(devices_name),
-                        vol.Optional("password"): str}),
+                        vol.Optional("password"): str, vol.Optional("polling"): bool}),
         )
 
     @callback

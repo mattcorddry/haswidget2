@@ -15,7 +15,8 @@
             },
             "discovery_confirm": {
                 "data": {
-                    "password": "Password / API Key"
+                    "password": "Password / API Key",
+                    "polling": "Enable device polling"
                 },
                 "description": "Do you want to setup {name} ({host})?"
             },
