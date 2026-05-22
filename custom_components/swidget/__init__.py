@@ -58,7 +58,7 @@ async def async_discover_devices(hass: HomeAssistant) -> dict[str, SwidgetDevice
     discovered_devices: dict[str, SwidgetDiscoveredDevice] = await discover_devices()
     # for device in discovered_devices:
     #     discovered_devices[dr.format_mac(device.mac)] = device
-    _LOGGER.error(f"Forced Swidget Discovery found: {discovered_devices}")
+    _LOGGER.info(f"Forced Swidget Discovery found: {discovered_devices}")
     return discovered_devices
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
@@ -80,7 +80,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Swidget from a config entry."""
     try:
-        _LOGGER.error(f"Setup Data: {entry.data}")
+        _LOGGER.info(f"Setup Data: {entry.data}")
         device: SwidgetDevice = await discover_single(entry.data['host'],
                                                       entry.data['password'],
                                                       False)
@@ -92,7 +92,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # hass.config_entries.async_setup_platforms(entry, PLATFORMS)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     hass.loop.create_task(device._websocket.listen())
-    _LOGGER.error(" async_setup_entry returned")
+    _LOGGER.debug("async_setup_entry returned")
     return True
 
 
@@ -103,7 +103,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     # return unload_ok
     hass_data: dict[str, Any] = hass.data[DOMAIN]
     device: SwidgetDevice = hass_data[entry.entry_id].device
-    _LOGGER.error(f" async_unload_entry: {device}")
+    _LOGGER.debug(f" async_unload_entry: {device}")
     if device.use_websockets:
         device._websocket.close()
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):

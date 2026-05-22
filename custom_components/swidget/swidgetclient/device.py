@@ -86,7 +86,7 @@ class SwidgetDevice:
 
     async def process_state(self, state):
         """ Process any information about the state of the device or insert"""
-        _LOGGER.error(f"Processing state: {state}")
+        _LOGGER.debug(f"Processing state: {state}")
         # State is not always in the state (during callback)
         try:
             self.rssi = state["connection"]["rssi"]
@@ -98,22 +98,21 @@ class SwidgetDevice:
 
         """
         for assembly in self.assemblies:
-            _LOGGER.error(assembly)
+            _LOGGER.debug(assembly)
             for id, component in self.assemblies[assembly].components.items():
-                _LOGGER.error(f"id:{id}   component: {component.__dict__}")
-                _LOGGER.error(f"component.function: {component.functions}")
+                _LOGGER.debug(f"id:{id}   component: {component.__dict__}")
+                _LOGGER.debug(f"component.function: {component.functions}")
                 try:
-                    _LOGGER.error(f"Setting State: {state[assembly]['components'][id]}")
+                    _LOGGER.debug(f"Setting State: {state[assembly]['components'][id]}")
                     component.functions.update(state[assembly]["components"][id])
                 except:
                     pass
         self._last_update = int(time.time())
-        _LOGGER.error(f"Finished getting state: {self.__dict__}")
+        _LOGGER.info(f"Finished getting state: {self.__dict__}")
         a = self.assemblies['host'].__dict__
         b = self.assemblies['insert'].__dict__
-        _LOGGER.error(f"Finished getting state: {self.__dict__}")
-        _LOGGER.error(f"Finished getting state: {a}")
-        _LOGGER.error(f"Finished getting state: {b}")
+        _LOGGER.debug(f"Finished getting host state: {a}")
+        _LOGGER.debug(f"Finished getting insert state: {b}")
 
     async def get_friendly_name(self):
         try:
@@ -150,7 +149,7 @@ class SwidgetDevice:
                                "request_id": "command",
                                "payload": data
                                })
-            _LOGGER.error(f"About to send data: {data}")
+            _LOGGER.debug(f"About to send data: {data}")
             await self._websocket.send_str(data)
         else:
             async with self._session.post(

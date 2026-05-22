@@ -35,7 +35,7 @@ class SwidgetProtocol(ssdp.SimpleServiceDiscoveryProtocol):
         mac_address = headers["USN"].split("-")[-1]
         ip_address = urlparse(headers["LOCATION"]).hostname
         if headers["ST"] == SWIDGET_ST:
-            _LOGGER.error(headers["SERVER"])
+            _LOGGER.debug(headers["SERVER"])
             device_type = headers["SERVER"].split(" ")[1].split("+")[0]
             insert_type = headers["SERVER"].split(" ")[1].split("+")[1].split("/")[0]
             friendly_name = headers["SERVER"].split("/")[2].strip('"')
