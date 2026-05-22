@@ -57,11 +57,18 @@ class SwidgetDevice:
 
     async def get_summary(self):
         """Get a summary of the device over HTTP"""
-        async with self._session.get(
-            url=f"https://{self.ip_address}/api/v1/summary", ssl=self.ssl
-        ) as response:
-            summary = await response.json()
-        await self.process_summary(summary)
+        try:
+            async with self._session.get(
+                url=f"https://{self.ip_address}/api/v1/summary", ssl=self.ssl
+            ) as response:
+                summary = await response.json()
+            await self.process_summary(summary)
+        except aiohttp.ClientError as e:
+            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
+            _LOGGER.error(f"aiohttp client error: {e}")
+        except Exception as e:
+            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
+            _LOGGER.error(f"An unexpected error occurred: {e}")
 
     async def process_summary(self, summary):
         """ Process the data around the summary of the device"""
@@ -79,11 +86,18 @@ class SwidgetDevice:
 
     async def get_state(self):
         """ Get the state of the device over HTTP"""
-        async with self._session.get(
-            url=f"https://{self.ip_address}/api/v1/state", ssl=self.ssl
-        ) as response:
-            state = await response.json()
-        await self.process_state(state)
+        try:
+            async with self._session.get(
+                url=f"https://{self.ip_address}/api/v1/state", ssl=self.ssl
+            ) as response:
+                state = await response.json()
+            await self.process_state(state)
+        except aiohttp.ClientError as e:
+            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
+            _LOGGER.error(f"aiohttp client error: {e}")
+        except Exception as e:
+            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
+            _LOGGER.error(f"An unexpected error occurred: {e}")
 
     async def process_state(self, state):
         """ Process any information about the state of the device or insert"""
