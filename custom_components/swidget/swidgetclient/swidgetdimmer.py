@@ -9,8 +9,8 @@ import logging
 log = logging.getLogger(__name__)
 class SwidgetDimmer(SwidgetDevice):
 
-    def __init__(self, host,  secret_key: str, ssl: bool) -> None:
-        super().__init__(host=host, secret_key=secret_key, ssl=ssl)
+    def __init__(self, host,  secret_key: str, ssl: bool, polling: bool) -> None:
+        super().__init__(host=host, secret_key=secret_key, ssl=ssl, polling=polling)
         self._device_type = "dimmer"
 
     @property  # type: ignore

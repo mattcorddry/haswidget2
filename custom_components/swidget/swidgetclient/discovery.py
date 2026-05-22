@@ -62,18 +62,18 @@ async def discover_devices():
     _LOGGER.debug(f"Found the following Swidget devices from SSDP discovery: {devices}")
     return devices
 
-async def discover_single(host: str, password: str, ssl: bool) -> SwidgetDevice:
+async def discover_single(host: str, password: str, ssl: bool, polling: bool) -> SwidgetDevice:
     """Discover a single device by the given IP address.
 
     :param host: Hostname of device to query
     :rtype: SwidgetDevice
     :return: Object for querying/controlling found device.
     """
-    swidget_device = SwidgetDevice(host, password, ssl)
+    swidget_device = SwidgetDevice(host, password, ssl, polling)
     await swidget_device.get_summary()
     device_type = swidget_device.device_type
     device_class = _get_device_class(device_type)
-    dev = device_class(host, password, False)
+    dev = device_class(host, password, False, polling)
     await dev.update()
     return dev
 

@@ -6,8 +6,8 @@ from .device import (
 
 class SwidgetOutlet(SwidgetDevice):
 
-    def __init__(self, host,  secret_key: str, ssl: bool) -> None:
-        super().__init__(host=host, secret_key=secret_key, ssl=ssl)
+    def __init__(self, host,  secret_key: str, ssl: bool, polling: bool) -> None:
+        super().__init__(host=host, secret_key=secret_key, ssl=ssl, polling=polling)
         self._device_type = DeviceType.Outlet
 
     @property  # type: ignore

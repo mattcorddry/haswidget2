@@ -14,7 +14,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 _LOGGER = logging.getLogger(__name__)
 
 REQUEST_REFRESH_DELAY = 0.35
-
+POLLING_INTERVAL = 10
 
 class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
     """DataUpdateCoordinator to gather data for a specific Swidget device."""
@@ -26,7 +26,9 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
     ) -> None:
         """Initialize DataUpdateCoordinator to gather data for specific device"""
         self.device = device
-        update_interval = timedelta(seconds=10)
+        update_interval = timedelta(seconds=POLLING_INTERVAL)
+        if self.device.do_polling:
+            _LOGGER.info(f"Enabling device poll every {POLLING_INTERVAL} seconds")
         super().__init__(
             hass,
             _LOGGER,
@@ -48,14 +50,17 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self) -> SwidgetDevice:
         """Fetch all device and sensor data from api over local HTTP."""
-        try:
-            # Explicitly force the underlying swidget library object
-            # to make a REST call to retrieve the physical state of the hardware.
-            await self.device.update()
+        if self.device.do_polling:
+            ipaddr=self.device.ip_address
+            _LOGGER.info(f"Polling swidget {ipaddr} for state")
+            try:
+                # Explicitly force the underlying swidget library object
+                # to make a REST call to retrieve the physical state of the hardware.
+                await self.device.update()
 
-            # Return the updated device object so it caches inside self.coordinator.data
-            return self.device
+                # Return the updated device object so it caches inside self.coordinator.data
+                return self.device
 
-        except Exception as err:
-            # Gracefully catches network drops/timeouts and flags entities as unavailable
-            raise UpdateFailed(f"Error communicating with Swidget device over HTTP: {err}")
+            except Exception as err:
+                # Gracefully catches network drops/timeouts and flags entities as unavailable
+                raise UpdateFailed(f"Error communicating with Swidget device over HTTP: {err}")

@@ -30,6 +30,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Optional(CONF_HOST, default=""): str,
         vol.Optional("password", default=""): str,
+        vol.Optional("polling", default=False): bool,
     }
 )
 
@@ -137,7 +138,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self.context["title_placeholders"] = placeholders
         return self.async_show_form(
             step_id="discovery_confirm",
-            data_schema=vol.Schema({vol.Required("password"): str}),
+            data_schema=vol.Schema({vol.Optional("password"): str}),
             description_placeholders=placeholders
         )
 
@@ -203,7 +204,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="pick_device",
             data_schema=vol.Schema({vol.Required(CONF_DEVICE): vol.In(devices_name),
-                        vol.Required("password"): str}),
+                        vol.Optional("password"): str}),
         )
 
     @callback

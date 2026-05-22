@@ -15,7 +15,7 @@
             },
             "discovery_confirm": {
                 "data": {
-                    "password": "Password"
+                    "password": "Password / API Key"
                 },
                 "description": "Do you want to setup {name} ({host})?"
             },
@@ -27,7 +27,8 @@
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Password / API Key"
+                    "password": "Password / API Key",
+                    "polling": "Enable device polling"
                 },
                 "description": "If you leave the host empty, discovery will be used to find devices."
             }

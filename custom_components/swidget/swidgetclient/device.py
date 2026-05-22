@@ -24,10 +24,11 @@ class DeviceType(Enum):
 
 
 class SwidgetDevice:
-    def __init__(self, host, secret_key, ssl=False, use_websockets=True):
+    def __init__(self, host, secret_key, ssl=False, use_websockets=True, polling=False):
         self.ip_address = host
         self.ssl = ssl
         self.secret_key = secret_key
+        self.polling = polling
         self.use_websockets = use_websockets
         self._friendly_name = "Unknown Swidget Device"
         headers = {"x-secret-key": self.secret_key}
@@ -296,6 +297,11 @@ class SwidgetDevice:
     def friendly_name(self) -> str:
         """Return a friendly description of the device"""
         return self._friendly_name
+
+    @property
+    def do_polling(self) -> bool:
+        """Return true if polling is requested at setup time"""
+        return self.polling
 
     def __repr__(self):
         if self._last_update is None:
