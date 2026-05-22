@@ -65,8 +65,8 @@ class SwidgetWebsocket:
             async with self.session.ws_connect(self.uri, headers=headers, verify_ssl=False, heartbeat=30) as self.ws_client:
                 self.state = STATE_CONNECTED
                 self.failed_attempts = 0
-                self.send_str(json.dumps({"type": "summary", "request_id": "1"}))
-                self.send_str(json.dumps({"type": "state", "request_id": "2"}))
+                await self.send_str(json.dumps({"type": "summary", "request_id": "1"}))
+                await self.send_str(json.dumps({"type": "state", "request_id": "2"}))
                 async for message in self.ws_client:
                     if self.state == STATE_STOPPED:
                         break
