@@ -27,7 +27,7 @@
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Password"
+                    "password": "Password / API Key"
                 },
                 "description": "If you leave the host empty, discovery will be used to find devices."
             }
