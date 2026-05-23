@@ -83,7 +83,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         redacted_data = entry.data.copy()
         if "password" in redacted_data:
             redacted_data["password"] = "**REDACTED**"
-        _LOGGER.info(f"Setting up new Swidget: {entry.data}")
+        _LOGGER.info(f"Setting up new Swidget: {redacted_data}")
         password=entry.data.get('password', '')
         polling=entry.data.get('polling', False) 
         device: SwidgetDevice = await discover_single(entry.data['host'],
