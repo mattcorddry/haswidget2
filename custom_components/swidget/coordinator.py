@@ -29,7 +29,7 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
         update_interval = timedelta(seconds=POLLING_INTERVAL)
         if self.device.do_polling:
             ipaddr=self.device.ip_address
-            _LOGGER.info(f"Enabling device polling for {IPADDR} every {POLLING_INTERVAL} seconds")
+            _LOGGER.info(f"Enabling device polling for {ipaddr} every {POLLING_INTERVAL} seconds")
         super().__init__(
             hass,
             _LOGGER,
