@@ -2,7 +2,7 @@ import json
 import logging
 import time
 
-from aiohttp import ClientSession, TCPConnector, ClientError
+from aiohttp import ClientSession, TCPConnector
 from enum import auto, Enum
 from typing import Any, Dict, List
 
@@ -63,9 +63,6 @@ class SwidgetDevice:
             ) as response:
                 summary = await response.json()
             await self.process_summary(summary)
-        except aiohttp.ClientError as e:
-            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
-            _LOGGER.error(f"aiohttp client error: {e}")
         except Exception as e:
             _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
             _LOGGER.error(f"An unexpected error occurred: {e}")
@@ -92,9 +89,6 @@ class SwidgetDevice:
             ) as response:
                 state = await response.json()
             await self.process_state(state)
-        except aiohttp.ClientError as e:
-            _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
-            _LOGGER.error(f"aiohttp client error: {e}")
         except Exception as e:
             _LOGGER.error(f"unable to fetch from https://{self.ip_address}/api/v1/summary")
             _LOGGER.error(f"An unexpected error occurred: {e}")
