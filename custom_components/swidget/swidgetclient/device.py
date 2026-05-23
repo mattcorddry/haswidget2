@@ -2,7 +2,7 @@ import json
 import logging
 import time
 
-from aiohttp import ClientSession, TCPConnector
+from aiohttp import ClientSession, TCPConnector, ClientError
 from enum import auto, Enum
 from typing import Any, Dict, List
 
