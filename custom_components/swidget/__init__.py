@@ -58,7 +58,7 @@ async def async_discover_devices(hass: HomeAssistant) -> dict[str, SwidgetDevice
     discovered_devices: dict[str, SwidgetDiscoveredDevice] = await discover_devices()
     # for device in discovered_devices:
     #     discovered_devices[dr.format_mac(device.mac)] = device
-    _LOGGER.info(f"Forced Swidget Discovery found: {discovered_devices}")
+    _LOGGER.debug(f"Forced Swidget Discovery found: {discovered_devices}")
     return discovered_devices
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
@@ -80,7 +80,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Swidget from a config entry."""
     try:
-        _LOGGER.info(f"Setup Data: {entry.data}")
+        redacted_data = entry.data.copy()
+        if "password" in redacted_data:
+            redacted_data["password"] = "**REDACTED**"
+        _LOGGER.info(f"Setting up new Swidget: {entry.data}")
         password=entry.data.get('password', '')
         polling=entry.data.get('polling', False) 
         device: SwidgetDevice = await discover_single(entry.data['host'],
