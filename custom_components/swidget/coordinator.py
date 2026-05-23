@@ -28,7 +28,8 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
         self.device = device
         update_interval = timedelta(seconds=POLLING_INTERVAL)
         if self.device.do_polling:
-            _LOGGER.info(f"Enabling device poll every {POLLING_INTERVAL} seconds")
+            ipaddr=self.device.ip_address
+            _LOGGER.info(f"Enabling device polling for {IPADDR} every {POLLING_INTERVAL} seconds")
         super().__init__(
             hass,
             _LOGGER,
@@ -52,7 +53,7 @@ class SwidgetDataUpdateCoordinator(DataUpdateCoordinator):
         """Fetch all device and sensor data from api over local HTTP."""
         if self.device.do_polling:
             ipaddr=self.device.ip_address
-            _LOGGER.info(f"Polling swidget {ipaddr} for state")
+            _LOGGER.debug(f"Polling swidget {ipaddr} for state")
             try:
                 # Explicitly force the underlying swidget library object
                 # to make a REST call to retrieve the physical state of the hardware.

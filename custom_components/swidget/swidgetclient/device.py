@@ -123,11 +123,11 @@ class SwidgetDevice:
                 except:
                     pass
         self._last_update = int(time.time())
-        _LOGGER.info(f"Finished getting state: {self.__dict__}")
+        _LOGGER.debug(f"Finished getting state: {self.__dict__}")
         a = self.assemblies['host'].__dict__
         b = self.assemblies['insert'].__dict__
-        _LOGGER.debug(f"Finished getting host state: {a}")
-        _LOGGER.debug(f"Finished getting insert state: {b}")
+        _LOGGER.debug(f"Expanded host state: {a}")
+        _LOGGER.debug(f"Expanded insert state: {b}")
 
     async def get_friendly_name(self):
         try:
